@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">Hello World, Sealand!</string>
     <string name="app_name">Sealand android</string>
-
+    <string name="name">Name:</string>
+    <string name="description">Description:</string>
+    <string name="send">Send</string>
+    <string name="invalid_server_response">The Server sent an invalid response</string>
+    <string name="location_pending">Waiting for location...</string>
+    
 </resources>
