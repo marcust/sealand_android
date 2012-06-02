@@ -30,7 +30,7 @@ public class BaseActivity extends Activity {
 
 					public void run() {
 
-						final String url = "http://10.0.2.2:3000/api/materials?api_key=f34df0fc602d1ef9d7a1ba8fa8a051fd17d6d2a1";
+						final String url = "http://10.0.2.2:3000/api/materials";
 
 
 

@@ -23,6 +23,7 @@ public class HttpHelper {
         Log.d( BaseActivity.LOG_ID, "Calling  " + url + ":\n" + payload.toString() );
 
         post.addHeader("Content-Type", "application/json");
+        post.addHeader("Authorization", "api_key=f34df0fc602d1ef9d7a1ba8fa8a051fd17d6d2a1");
         post.setEntity( new StringEntity(payload.toString(), "UTF-8" ) );
         
         
