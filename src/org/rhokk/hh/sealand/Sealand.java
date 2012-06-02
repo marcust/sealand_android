@@ -2,8 +2,6 @@ package org.rhokk.hh.sealand;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.rhokk.hh.sealand.http.AsyncCallback;
-import org.rhokk.hh.sealand.http.ServerResponse;
 
 import android.location.Location;
 import android.os.Bundle;
@@ -53,15 +51,8 @@ public class Sealand extends BaseLocationBasedActivity {
 		safePut( request, "location", makeJSONLocationObject( lastKnownLocation ) );
 		safePut( request, "material", makeJSONMaterialObject( name, description ) );
 		
-		asyncSendWithProgress( request, "Creating Material", new AsyncCallback() {
-			
-			@Override
-			public void onResponse(ServerResponse response) {
-				toast("Material Created");
-				clearInputFields();
-			}
-		} );
-		
+		asyncSendWithProgress( request );
+		clearInputFields();
 	}
 
 

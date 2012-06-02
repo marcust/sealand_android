@@ -17,14 +17,14 @@ import android.util.Log;
 
 public class HttpHelper {
 
-    public static ServerResponse getServerResponse( final JSONObject payload, final String url, String userAgentString ) throws ClientProtocolException, IOException {
+    public static ServerResponse getServerResponse( final String payload, final String url, String userAgentString ) throws ClientProtocolException, IOException {
         final HttpPost post = new HttpPost( url );
 
         Log.d( BaseActivity.LOG_ID, "Calling  " + url + ":\n" + payload.toString() );
 
         post.addHeader("Content-Type", "application/json");
         post.addHeader("Authorization", "api_key=f34df0fc602d1ef9d7a1ba8fa8a051fd17d6d2a1");
-        post.setEntity( new StringEntity(payload.toString(), "UTF-8" ) );
+        post.setEntity( new StringEntity( payload, "UTF-8" ) );
         
         
         final HttpClient client = new DefaultHttpClient();

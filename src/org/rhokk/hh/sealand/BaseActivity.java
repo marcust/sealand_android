@@ -1,84 +1,81 @@
 package org.rhokk.hh.sealand;
 
-import java.io.IOException;
-
-import org.apache.http.client.ClientProtocolException;
 import org.json.JSONObject;
-import org.rhokk.hh.sealand.helper.GlobalBackgroundExecutor;
 import org.rhokk.hh.sealand.http.AsyncCallback;
-import org.rhokk.hh.sealand.http.HttpHelper;
-import org.rhokk.hh.sealand.http.ServerResponse;
+import org.rhokk.hh.sealand.service.UploadManagementService;
+import org.rhokk.hh.sealand.service.UploadManagementServiceImpl;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.widget.Toast;
 
 public class BaseActivity extends Activity {
 
 	public static final String LOG_ID = "Sealand";
 
-	protected void asyncSendWithProgress( final JSONObject payload,
-			final String progressMessage,
-			final AsyncCallback callback ) {
-		final ProgressDialog progress = showProgress( progressMessage );
+	private UploadManagementService mService;
 
-		GlobalBackgroundExecutor.execute( 
-				new Runnable() {
+	private ServiceConnection mConnection = new ServiceConnection() {
 
-					public void run() {
+		public void onServiceConnected(ComponentName className,
+                IBinder service) {
+            // This is called when the connection with the service has been
+            // established, giving us the service object we can use to
+            // interact with the service.  We are communicating with our
+            // service through an IDL interface, so get a client-side
+            // representation of that from the raw service object.
+            mService = UploadManagementService.Stub.asInterface(service);
+        }
 
-						final String url = "http://10.0.2.2:3000/api/materials";
+		@Override
+		public void onServiceDisconnected(ComponentName arg0) {
+			mService = null;
+			
+		}
+    };
+    
+    
 
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+//		ComponentName startService = startService(new Intent(this,UploadManagementServiceImpl.class));
+//		
+//		if ( startService == null ) {
+//			showError("Kann service nicht starten");
+//			}
+		
+		boolean bindService = getApplicationContext().bindService(new Intent(this,UploadManagementServiceImpl.class),
+				mConnection, Context.BIND_AUTO_CREATE);
+		
+		if ( !bindService ) {
+			showError("Kann Service nicht binden");
+		}
+		
+	}
 
+	protected void asyncSendWithProgress( final JSONObject payload ) {
 
-						try {
+		try {
+			mService.scheduleUpload( payload.toString() );
+		} catch (RemoteException e) {
+			throw new RuntimeException( e );
+		}
 
-							final ServerResponse response = HttpHelper.getServerResponse( payload, url, "Sealand" );
+	}
+	
+	public BaseActivity() {
 
-
-							if ( response.isSuccess() ) {
-								toastInUiThread( mapMessage( response.getResponseCode() ) );
-							} else {
-								showErrorInUiThread( mapMessage( response.getResponseCode() )  );
-							}
-
-							runOnUiThread( new Runnable() {
-
-								@Override
-								public void run() {
-									callback.onResponse( response );
-								}
-							} );
-
-						} catch (ClientProtocolException e) {
-							showErrorInUiThread( e );
-							e.printStackTrace();
-						} catch (IOException e) {
-							showErrorInUiThread( e );
-							e.printStackTrace();
-						} finally {
-							hideProgress( progress );
-						}
-					}
-
-					private String mapMessage(int responseCode) {
-						int responseId;
-
-						switch ( responseCode ) {
-						case 201: responseId = R.string.created; break;
-						case 422: responseId = R.string.unprocessable; break;
-						case 412: responseId = R.string.precondition_failed; break; 
-						case 401: responseId = R.string.authentication_error; break;
-						default: responseId = R.string.unknown_error; break;
-						}
-
-						return getString( responseId );
-					}
-
-				} );
 	}
 
 
