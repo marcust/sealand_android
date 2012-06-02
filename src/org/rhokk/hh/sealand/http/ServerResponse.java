@@ -1,29 +1,29 @@
 package org.rhokk.hh.sealand.http;
 
-import org.json.JSONObject;
 
 public class ServerResponse {
 
-    final JSONObject _object;
-    final Result _result;
+    private final int  _responseCode;
     
-    private ServerResponse ( JSONObject object, Result result ) {
+    private ServerResponse ( final int responseCode ) {
         super();
-        _object = object;
-        _result = result;
+        _responseCode = responseCode;
     }
     
-    public static ServerResponse create( JSONObject object, Result result ) {
-        return new ServerResponse( object, result );
-    }
+    public static ServerResponse create(int statusCode) {
+    	return new ServerResponse( statusCode  );
+	}
 
-    public JSONObject getObject() {
-        return _object;
-    }
+	public int getResponseCode() {
+		return _responseCode;
+	}
 
-    public boolean isSuccess() {
-        return _result == Result.OK;
-    }
-    
-    
+	public static ServerResponse createError() {
+    	return new ServerResponse( -1 );
+	}
+
+	public boolean isSuccess() {
+		return _responseCode >= 200 && _responseCode < 400;
+	}
+
 }

@@ -8,4 +8,11 @@
     <string name="invalid_server_response">The Server sent an invalid response</string>
     <string name="location_pending">Waiting for location...</string>
     
+    <string name="created">Material created</string>
+    <string name="unprocessable">Outdated version</string>
+    <string name="precondition_failed">Authentication error</string>
+    <string name="authentication_error">Authentication error</string>
+    <string name="unknown_error">Unknown error</string>
+    
+    
 </resources>

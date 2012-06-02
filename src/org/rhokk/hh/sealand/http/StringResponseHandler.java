@@ -8,8 +8,6 @@ import java.io.InputStream;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ResponseHandler;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.rhokk.hh.sealand.util.IOUtils;
 
 import android.util.Log;
@@ -27,9 +25,7 @@ public class StringResponseHandler implements ResponseHandler<ServerResponse> {
 
             Log.i( TAG, "Response is: " + responseValue );
 
-            return ServerResponse.create( new JSONObject( ImmutableMap.of("message", "Ok " +  response.getStatusLine().getStatusCode())),
-                    response.getStatusLine().getStatusCode() == 200 ? 
-                            Result.OK : Result.ERROR );
+            return ServerResponse.create( response.getStatusLine().getStatusCode()  );
 
         } catch (IllegalStateException e) {
             Log.i( TAG, e.getMessage() );
@@ -39,8 +35,7 @@ public class StringResponseHandler implements ResponseHandler<ServerResponse> {
             e.printStackTrace();
         }
 
-        return ServerResponse.create( new JSONObject( ImmutableMap.of("message", "Communication error") ),
-                Result.ERROR );
+        return ServerResponse.createError();
     }
 
 }
