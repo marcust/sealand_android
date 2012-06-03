@@ -33,22 +33,25 @@ public class Sealand extends BaseLocationBasedActivity {
 
 	protected void doAsyncDataSend( final String name, final String description,
 			final Location lastKnownLocation ) {
-     		  // {
-			  //   'location' => {
-			  //     'langitude' => 53.3151,
-			  //     'longitude' => 8.2351,
-			  //     'accuracy' => 12.4
-			  //   },
-			  //   'material' => {
-			  //     'name' => 'Material name'
-			  //     'description' => 'optional description' 
-			  //   } 
-			  // }
+		//  {
+		//   'locations' => [{
+		//     'langitude' => 53.3151,
+		//     'longitude' => 8.2351,
+		//     'accuracy' => 12.4,
+		//     'description' => ''
+		//   }],
+		//   'material' => {
+		//     'name' => 'Material name'
+		//     'description' => 'optional description'
+		//   }
+		// }
 		
 		
 		final JSONObject request = new JSONObject(); 
+		final JSONArray locations = new JSONArray();
+		locations.put( makeJSONLocationObject( lastKnownLocation ) );
 		
-		safePut( request, "location", makeJSONLocationObject( lastKnownLocation ) );
+		safePut( request, "locations", locations );
 		safePut( request, "material", makeJSONMaterialObject( name, description ) );
 		
 		asyncSendWithProgress( request );
@@ -120,7 +123,8 @@ public class Sealand extends BaseLocationBasedActivity {
 		safePut( locationObject, "latitude", location != null ? location.getLatitude() : 0.0 );
 		safePut( locationObject, "longitude", location != null ? location.getLongitude() : 0.0 );
 		safePut( locationObject, "accuracy", location != null ? location.getAccuracy() : 0.0 );
-		
+		safePut( locationObject, "description", "" );
+
 		return locationObject;
 	}
 

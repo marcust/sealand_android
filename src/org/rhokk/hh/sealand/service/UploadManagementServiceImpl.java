@@ -81,7 +81,7 @@ public class UploadManagementServiceImpl extends Service  {
 
 						public void run() {
 
-							final String url = "http://10.0.2.2:3000/api/materials";
+							final String url = "http://10.0.2.2:3000/api/material";
 
 
 
