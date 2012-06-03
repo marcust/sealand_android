@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
+import org.rhokk.hh.sealand.BaseActivity;
 import org.rhokk.hh.sealand.R;
 import org.rhokk.hh.sealand.helper.GlobalBackgroundExecutor;
 import org.rhokk.hh.sealand.http.HttpHelper;
@@ -22,11 +23,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.util.Log;
 
 public class UploadManagementServiceImpl extends Service  {
 
+    public static final String BASE_URL;
+	
+    static {
+        if ( isRunningInEmulator() ) {
+            BASE_URL =  "http://10.0.2.2:3000/";
+        } else {
+            BASE_URL = "http://sealand.herokuapp.com/";
+        }
+        Log.i( BaseActivity.LOG_ID, "Using Base Url " + BASE_URL + ", because device is " + Build.PRODUCT );
+    }
+	
 	private static final long UPDATE_INTERVAL_MILLIS = 1000 * 60 * 15;
 	private final UploadManagementService.Stub _binder = new UploadManagementService.Stub() {
 
@@ -81,7 +95,7 @@ public class UploadManagementServiceImpl extends Service  {
 
 						public void run() {
 
-							final String url = "http://10.0.2.2:3000/api/material";
+							final String url = BASE_URL + "/api/material";
 
 
 
@@ -232,4 +246,8 @@ public class UploadManagementServiceImpl extends Service  {
 			doUploadIfPossible();
 		}
 	}
+	
+    protected static boolean isRunningInEmulator() {
+        return "google_sdk".equals( Build.PRODUCT ) || "sdk".equals( Build.PRODUCT );
+    }
 }

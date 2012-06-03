@@ -1,7 +1,6 @@
 package org.rhokk.hh.sealand;
 
 import org.json.JSONObject;
-import org.rhokk.hh.sealand.http.AsyncCallback;
 import org.rhokk.hh.sealand.service.UploadManagementService;
 import org.rhokk.hh.sealand.service.UploadManagementServiceImpl;
 
@@ -13,6 +12,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -151,6 +151,8 @@ public class BaseActivity extends Activity {
 		alert.show();
 	}
 
-
+    protected static boolean isRunningInEmulator() {
+        return "google_sdk".equals( Build.PRODUCT );
+    }
 
 }
