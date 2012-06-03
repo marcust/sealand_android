@@ -1,5 +1,6 @@
 package org.rhokk.hh.sealand;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -68,6 +69,17 @@ public class Sealand extends BaseLocationBasedActivity {
 		}
 	}
 	
+	private void safePut(JSONObject request, String key,
+			JSONArray object ) {
+		try {
+			request.put( key, object );
+		} catch (JSONException e) {
+			throw new RuntimeException("JSON Exception: " + e.getMessage() , e );
+		}
+	}
+	
+
+
 	private void safePut(JSONObject request, String key,
 			String value ) {
 		try {
